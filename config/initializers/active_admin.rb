@@ -1,10 +1,20 @@
 ActiveAdmin.setup do |config|
+  #config.download_links = false
+  #config.download_links = [:csv, :xml, :json, :pdf]
   # == Site Title
-  #
+  config.csv_options = {col_sep: ':'}
+  #method sjhow eerors
+  config.display_name_methods = [ :display_name,
+                                  :full_name,
+                                  :name,
+                                  :username,
+                                  :login,
+                                  :email,
+                                  :to_s ]
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "Vanilla"
+  config.site_title = "Admin"
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
@@ -277,6 +287,10 @@ ActiveAdmin.setup do |config|
   #
   # config.include_default_association_filters = true
 
+  #CONFING DEVELOPMENT
+  config.disable_streaming_in = ['development', 'staging']
+
+
   # == Footer
   #
   # By default, the footer shows the current Active Admin version. You can
@@ -290,4 +304,22 @@ ActiveAdmin.setup do |config|
   # You can inherit it with own class and inject it for all resources
   #
   # config.order_clause = MyOrderClause
+  # nombre de sitio web
+  config.site_title = "Admin"
+  config.site_title_link = "activeadmin"
+  config.site_title_image = "http://www.google.com/images/logos/google_logo_41.png"
+  config.footer = "activeadmin dashboard"
+  config.namespace :admin do |admin|
+    admin.build_menu do |menu|
+      menu.add label: 'blog', priority: 0
+    end
+  end
+
+
+
+
+
+
+
+
 end

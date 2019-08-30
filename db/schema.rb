@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171110001613) do
+ActiveRecord::Schema.define(version: 20190828145453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,47 @@ ActiveRecord::Schema.define(version: 20171110001613) do
     t.datetime "updated_at",                          null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+  end
+
+  create_table "job_notifier_jobs", force: :cascade do |t|
+    t.string   "identifier"
+    t.string   "job_id"
+    t.string   "status"
+    t.string   "job_class"
+    t.text     "result"
+    t.boolean  "notified",   default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["identifier"], name: "index_job_notifier_jobs_on_identifier", using: :btree
+    t.index ["job_id"], name: "index_job_notifier_jobs_on_job_id", using: :btree
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.string   "title"
+    t.string   "content"
+    t.string   "name"
+    t.boolean  "limited_access"
+    t.string   "image"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "active"
+    t.string   "user"
+    t.integer  "tickets_id"
+    t.integer  "posts_id"
+    t.string   "document"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

@@ -1,6 +1,7 @@
 class AdminUser < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  include JobNotifier::Identifier
+  identify_job_through(:id, :email)
+
   devise :database_authenticatable, 
          :recoverable, :rememberable, :trackable, :validatable
 end
