@@ -27,6 +27,10 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_admin_import (2.1.2)
+      activeadmin (>= 0.6.0)
+      activerecord-import (~> 0.4, >= 0.4.1)
+      rubyzip (~> 1.0, >= 1.0.0)
     active_material (1.4.2)
     activeadmin (1.1.0)
       arbre (>= 1.1.1)
@@ -56,12 +60,16 @@ GEM
     activejob (5.0.6)
       activesupport (= 5.0.6)
       globalid (>= 0.3.6)
+    activejob_backport (0.0.3)
+      activesupport (>= 4.0.0)
     activemodel (5.0.6)
       activesupport (= 5.0.6)
     activerecord (5.0.6)
       activemodel (= 5.0.6)
       activesupport (= 5.0.6)
       arel (~> 7.0)
+    activerecord-import (0.28.2)
+      activerecord (>= 3.2)
     activesupport (5.0.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (~> 0.7)
@@ -84,6 +92,11 @@ GEM
     colorize (0.8.1)
     concurrent-ruby (1.1.5)
     crass (1.0.2)
+    delayed_job (4.1.2)
+      activesupport (>= 3.0, < 5.1)
+    delayed_job_active_record (4.1.1)
+      activerecord (>= 3.0, < 5.1)
+      delayed_job (>= 3.0, < 5)
     devise (4.3.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -214,6 +227,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.2)
+    rubyzip (1.2.3)
     sass (3.5.2)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -268,11 +282,14 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
+  active_admin_import (= 2.1.2)
   activeadmin (~> 1.1.0)
   activeadmin_addons
   activeadmin_jobs
+  activejob_backport
   byebug
   coffee-rails (~> 4.2)
+  delayed_job_active_record
   devise
   jbuilder (~> 2.5)
   jquery-rails

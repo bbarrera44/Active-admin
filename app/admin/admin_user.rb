@@ -1,18 +1,18 @@
 ActiveAdmin.register AdminUser do
-#===================================================== import
-  action_item :import_users,  only: :index do
-  link_to "Import_users", import_form_admin_admin_users_path
-  end
 
-  collection_action :import_form, title: "Import Users" do
+  active_admin_import validate: false,
+                      template: 'import' ,
+                      template_object: ActiveAdminImport::Model.new(
+                       hint: "extructura del archivo:  'email', 'password'",
+                       allow_archive: false
+  )
+  sidebar :help do
+    ul do
+      li "archivo con extencion csv"
+    end
   end
-
-  collection_action :import, title: "Import Users", method: :post do
-  end
-
-  collection_action :import_users, title: "Import Users", method: :post do
-    file_path = admin_jobs_path(params[:data][:source])
-    UserUploadJob.perform_later(current_admin_user.job_identifier, file_path)
+  sidebar :help_import_csv, if: proc{:index} do
+    "exportar archivo csv"
   end
 
 #==========================================
@@ -41,4 +41,41 @@ ActiveAdmin.register AdminUser do
     f.actions
   end
 
-end
+  controller do
+
+    def do_import
+      file = params[:active_admin_import_model]['file'].path
+      if file.present?
+        data = File.read(file)
+        csv = CSV.new(data, :headers => true, :header_converters => :symbol, :converters => [:all])
+        records = csv.to_a.map {|row| row.to_hash}
+        records.each do |record|
+          data_types = AdminUser.find_by_email(record[:email])
+          if data_types.present?
+            data_types.update(
+                email: record[:email],
+                password: record[:password]
+            )
+          else
+            data_types =  AdminUser.new(
+                email: record[:email],
+                password: record[:password]
+            )
+            data_types.save
+          end
+          flash[:notice] = "cargados con éxito"
+        end
+        redirect_to admin_admin_users_path
+      end
+    end
+  end
+  end
+
+  ActiveAdmin.register Post do
+    belongs_to :admin_user, optional: true
+    # navigation_menu :project
+
+  end
+
+
+

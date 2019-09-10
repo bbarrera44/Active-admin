@@ -1,4 +1,4 @@
-<%= semantic_form_for :data, url: { action: :import_users }, method: :post do |f| %>
+<%= semantic_form_for :data, url: { action: :active_admin_import_users }, method: :post do |f| %>
   <%= f.inputs "Form" do %>
     <%= f.input :source, as: :file, label: "File", :hint => "Excel file" %>
   <% end %>
@@ -6,3 +6,5 @@
     <%= f.action :submit, as: :button, label: "import" %>
   <% end %>
 <% end %>
+
+

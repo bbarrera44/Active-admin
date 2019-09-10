@@ -60,5 +60,11 @@ gem "activeadmin_jobs"
 source 'https://rails-assets.org' do
   gem 'rails-assets-growl', '~> 1.3.1'
 end
+#job
+gem 'delayed_job_active_record'
+#gemenqueue
+gem 'activejob_backport'
+#import format csv
+gem "active_admin_import" , '2.1.2'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

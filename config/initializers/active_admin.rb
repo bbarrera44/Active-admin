@@ -4,13 +4,14 @@ ActiveAdmin.setup do |config|
   # == Site Title
   config.csv_options = {col_sep: ':'}
   #method sjhow eerors
-  config.display_name_methods = [ :display_name,
-                                  :full_name,
-                                  :name,
-                                  :username,
-                                  :login,
-                                  :email,
-                                  :to_s ]
+  # config.display_name_methods = [ :display_name,
+  #                                 :full_name,
+  #                                 :name,
+  #                                 :username,
+  #                                 :login,
+  #                                 :email,
+  #                                 :to_s ]
+
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #

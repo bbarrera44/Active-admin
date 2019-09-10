@@ -2,6 +2,12 @@ ActiveAdmin.register Post do
   #index download_links: false
   index download_links: [:pdf, :csv]
 
+  ActiveAdmin.register Post  do
+    active_admin_import validate: true,
+                        before_batch_import: proc { |import|
+                          import.name
+                        }
+                          end
     csv do
       column('title', humanize_name: false)
       column('name', humanize_name: false)
@@ -15,7 +21,7 @@ ActiveAdmin.register Post do
 #includes :emai
   #scope_to :admin_user, if: proc{ admin_user.limited_access? }
   permit_params :title, :content, :name, :image
-  actions :all, except: [:destroy]
+  actions :all#, except: [:destroy]
   menu parent: 'blog'
 
   show do
@@ -42,25 +48,29 @@ ActiveAdmin.register Post do
   end
 end
 #contenido de aytuda al lado de la pagina
-sidebar :help do
-  ul do
-    li "Need help? Email us at ejemplo@ejemplo.com"
-    li "ayuda2"
-  end
-end
-
-#   sidebar :help, if:proc{post.limited_access?} do
-#     "Limited access Administrador"
-#   end
-# member_action :new, method: [:post] do
-#   if request.post?
-#     resource.update_attriburtes! new: params[:id] || {}
-#     head :ok
-#   else
-#     render :new
+# sidebar :help do
+#   ul do
+#     li "Need help? Email us at ejemplo@ejemplo.com"
+#     li "ayuda2"
 #   end
 # end
-  #boton
+#
+  sidebar :help, if: proc{:show} do
+    "Limited access Administrador"
+  end
+
+  sidebar :access, if: proc{:post} do
+    "Limited access Administradorffdffadsafds"
+  end
+
+member_action :new, method: [:post] do
+  if request.post?
+    resource.update_attriburtes! new: params[:id] || {}
+    head :ok
+  else
+    render :new
+  end
+end
   action_item :view, only: :show do
     link_to "Projects", admin_project_path(post) if post.present?
   end
@@ -77,10 +87,10 @@ end
     column :title
     column :content
     column :limited_access
-    para poner imagenes
-    column "image" do |post|
-      image_tag post.image.image_url, size: "50x50"
-    end
+#    para poner imagenes
+#     column "image" do |post|
+#       image_tag post.image.image_url, size: "50x50"
+#     end
     actions
   end
 
@@ -88,8 +98,8 @@ end
   filter :title, as: :check_boxes, collection: proc {Post.all}
   #filter :name, filters: [:starts_with, :ends_with]
   #filter :name_equals
-  #filter :name_contains #mejor
-  filter :name, label: 'Nombreeeee'
+  filter :name_contains, label: 'Nombreeeee' #mejor
+  #filter :name, label: 'Nombreeeee'
 
 
 
@@ -102,6 +112,40 @@ end
 
   # menu if: proc{ admin_user.edit_posts? }
   controller do
+
+    def do_import
+      file = params[:active_admin_import_model]['file'].path
+      if file.present?
+        data = File.read(file)
+        csv = CSV.new(data, :headers => true, :header_converters => :symbol, :converters => [:all])
+        records = csv.to_a.map {|row| row.to_hash}
+        records.each do |record|
+          data_types = posts.find_by_title(record[:title])
+          puts "#{data_types.inspect}======="
+          if data_types.present?
+            data_types.update(
+                title: record[:title],
+                content: record[:content],
+                name: record[:name],
+                limited_access: record[:limited_access]
+            )
+          else
+            data_types.new(
+                title: record[:title],
+                content: record[:content],
+                name: record[:name],
+                limited_access: record[:limited_access]            )
+            data_types.save
+          end
+          flash[:notice] = "cargados con éxito"
+        end
+        #redirect_to company_master_data_types_path
+      end
+    end
+
+
+
+
     # def scoped_collection
     #   end_of_association_chain.where(limited_access: true)
     # end
@@ -142,6 +186,11 @@ end
       @post = Post.find(params[:id])
     end
   end
+end
+
+  ActiveAdmin.register AdminUser do
+    belongs_to :post, optional: true
+    # navigation_menu :project
   end
 
 
