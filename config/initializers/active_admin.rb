@@ -1,6 +1,9 @@
 ActiveAdmin.setup do |config|
+  config.namespace :admin do |admin|
+    admin.download_links = [:csv, :email ]
+  end
   #config.download_links = false
-  #config.download_links = [:csv, :xml, :json, :pdf]
+  config.download_links = [:csv, :xml, :json, :pdf, :email]
   # == Site Title
   config.csv_options = {col_sep: ':'}
   #method sjhow eerors
@@ -28,6 +31,11 @@ ActiveAdmin.setup do |config|
   # Note: Aim for an image that's 21px high so it fits in the header.
   #
   # config.site_title_image = "logo.png"
+
+
+#  ActiveAdmin::ResourceController.class_eval do
+#    include ActiveAdmin::Streaming
+ # end
 
   # == Default Namespace
   #

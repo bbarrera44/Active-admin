@@ -1,5 +1,8 @@
 ActiveAdmin.register Ticket do
+  ActiveAdmin::AsyncExport.from_email_address = 'admin@topshelfclothes.com'
+
   permit_params :name, :value
+  index download_links: [:pdf, :csv, :email]
 
 
   form title: 'A custom title' do |f|

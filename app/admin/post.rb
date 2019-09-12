@@ -1,6 +1,7 @@
 ActiveAdmin.register Post do
-  #index download_links: false
-  index download_links: [:pdf, :csv]
+  ActiveAdmin::AsyncExport.from_email_address = 'admin@topshelfclothes.com'
+
+  index download_links: [:pdf, :csv, :email]
 
   ActiveAdmin.register Post  do
     active_admin_import validate: true,
@@ -81,18 +82,18 @@ end
     'Welcome Administrator'
   end
 
-  index do
-    id_column
-    column :name
-    column :title
-    column :content
-    column :limited_access
-#    para poner imagenes
-#     column "image" do |post|
-#       image_tag post.image.image_url, size: "50x50"
-#     end
-    actions
-  end
+  # index do
+  #   id_column
+  #   column :name
+  #   column :title
+  #   column :content
+  #   column :limited_access
+  #  # para poner imagenes
+  #  #  column "image" do |post|
+  #  #    image_tag post.image.image_url, size: "50x50"
+  #  #  end
+  #   actions
+  # end
 
   filter :image, as: :check_boxes #selector
   filter :title, as: :check_boxes, collection: proc {Post.all}
@@ -134,7 +135,7 @@ end
                 title: record[:title],
                 content: record[:content],
                 name: record[:name],
-                limited_access: record[:limited_access]            )
+                limited_access: record[:limited_access])
             data_types.save
           end
           flash[:notice] = "cargados con éxito"
@@ -188,10 +189,10 @@ end
   end
 end
 
-  ActiveAdmin.register AdminUser do
-    belongs_to :post, optional: true
-    # navigation_menu :project
-  end
+  # ActiveAdmin.register AdminUser do
+  #   belongs_to :post, optional: true
+  #   # navigation_menu :project
+  # end
 
 
 

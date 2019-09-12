@@ -1,4 +1,8 @@
 ActiveAdmin.register AdminUser do
+  ActiveAdmin::AsyncExport.from_email_address = "admin@topshelfclothes.com"
+
+  permit_params :email, :password, role_ids: []
+
 
   active_admin_import validate: false,
                       template: 'import' ,
@@ -16,7 +20,11 @@ ActiveAdmin.register AdminUser do
   end
 
 #==========================================
-  permit_params :email, :password, :password_confirmation
+
+  index download_links: [:csv, :email] do
+    column :email
+  end
+
   index do
     selectable_column
     id_column
@@ -25,6 +33,10 @@ ActiveAdmin.register AdminUser do
     column :sign_in_count
     column :created_at
     actions
+  end
+
+  index as: :grid do |admin|
+    link_to image_tag(admin.email_path), admin_user_path(admin)
   end
 
   filter :email
@@ -69,13 +81,13 @@ ActiveAdmin.register AdminUser do
       end
     end
   end
-  end
-
-  ActiveAdmin.register Post do
-    belongs_to :admin_user, optional: true
-    # navigation_menu :project
-
-  end
+end
+  #
+  # ActiveAdmin.register Post do
+  #   belongs_to :admin_user, optional: true
+  #   # navigation_menu :project
+  #
+  # end
 
 
 
